@@ -1,0 +1,32 @@
+{
+  "name": "obs-lite",
+  "version": "1.1.0",
+  "description": "Lightweight desktop screen recorder for crisp, smooth game footage",
+  "main": "src/main.js",
+  "author": "OBS Lite",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
+  },
+  "devDependencies": {
+    "electron": "^37.2.0",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "app.obslite.recorder",
+    "productName": "OBS Lite",
+    "directories": { "output": "release" },
+    "files": ["src/**/*", "package.json"],
+    "win": { "target": ["nsis", "portable"] },
+    "nsis": { "artifactName": "OBS-Lite-Setup.${ext}" },
+    "portable": { "artifactName": "OBS-Lite-Portable.${ext}" },
+    "mac": {
+      "target": ["dmg"],
+      "category": "public.app-category.video",
+      "extendInfo": { "NSMicrophoneUsageDescription": "OBS Lite records your microphone when you choose it." }
+    }
+  }
+}

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self'; style-src 'self'; img-src 'self' data: blob:;">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OBS Lite</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="countdown"></div>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">●</span><span>OBS <b>Lite</b></span></div>
+    <div class="top-status"><span class="status-dot" id="statusDot"></span><span id="statusText">Ready</span></div>
+  </header>
+
+  <main class="layout">
+    <section class="workspace">
+      <div class="section-heading">
+        <div><p class="eyebrow">CAPTURE</p><h1>Screen recording</h1></div>
+        <button class="secondary" id="refreshSources">↻ Refresh sources</button>
+      </div>
+
+      <div class="panel source-panel">
+        <div class="panel-title"><h2>Source</h2><span class="subtle" id="sourceCount">Loading…</span></div>
+        <div id="sources" class="sources"><div class="empty">Looking for screens and windows…</div></div>
+        <p class="hint" id="permHint" hidden>Screen recording isn't allowed yet. Open System Settings → Privacy &amp; Security → Screen Recording, enable OBS Lite (or your terminal), then restart.</p>
+      </div>
+
+      <div class="panel settings-panel">
+        <div class="panel-title"><h2>Recording settings</h2><span class="subtle">Saved automatically</span></div>
+        <div class="presets">
+          <button class="chip" data-preset="smooth">Smooth · 1080p60</button>
+          <button class="chip" data-preset="crispy">Crispy · 1440p60</button>
+          <button class="chip" data-preset="ultra">Ultra · 4K60</button>
+        </div>
+        <div class="settings-grid">
+          <label>Resolution
+            <select id="resolution">
+              <option value="source" selected>Match source · native (crispest)</option>
+              <option value="1920x1080">1080p · 1920 × 1080</option>
+              <option value="2560x1440">1440p · 2560 × 1440</option>
+              <option value="3840x2160">4K · 3840 × 2160</option>
+            </select>
+          </label>
+          <label>Frame rate
+            <select id="fps">
+              <option value="30">30 FPS</option>
+              <option value="60" selected>60 FPS</option>
+              <option value="120">120 FPS (if supported)</option>
+            </select>
+          </label>
+          <label>Video bitrate
+            <select id="bitrate">
+              <option value="12000000">12 Mbps · Balanced</option>
+              <option value="20000000">20 Mbps · High</option>
+              <option value="35000000" selected>35 Mbps · Very high</option>
+              <option value="50000000">50 Mbps · Maximum</option>
+            </select>
+          </label>
+          <label>Audio
+            <select id="audio">
+              <option value="none">No audio</option>
+              <option value="system">System audio</option>
+              <option value="mic">Microphone</option>
+              <option value="both" selected>System + microphone</option>
+            </select>
+          </label>
+          <label>Countdown
+            <select id="countdown">
+              <option value="0">Off</option>
+              <option value="3" selected>3 seconds</option>
+              <option value="5">5 seconds</option>
+            </select>
+          </label>
+        </div>
+        <label class="check"><input type="checkbox" id="hideOnStart" checked> Minimize OBS Lite when recording starts</label>
+        <p class="hint" id="audioHint">Actual quality depends on your display, GPU, and system load. A lower-resolution source is never upscaled to real 4K.</p>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="panel control-panel">
+        <p class="eyebrow">RECORDING</p>
+        <div class="timer" id="timer">00:00:00</div>
+        <div class="record-state" id="recordState">Ready to record</div>
+        <div class="meter"><div id="meterFill"></div></div>
+        <div class="stats"><span>Size <b id="sizeStat">0 MB</b></span><span>Format <b id="fmtStat">-</b></span></div>
+        <button class="record-button" id="startBtn" disabled><span></span> Start Recording</button>
+        <div class="button-row">
+          <button class="secondary" id="pauseBtn" disabled>Pause</button>
+          <button class="secondary" id="stopBtn" disabled>Stop</button>
+        </div>
+      </div>
+
+      <div class="panel" id="savedBox" hidden>
+        <p class="eyebrow">SAVED</p>
+        <p class="path" id="savedPath"></p>
+        <button class="secondary" id="revealBtn">Show in folder</button>
+      </div>
+
+      <div class="panel output-panel">
+        <p class="eyebrow">OUTPUT</p>
+        <h2>Smooth, editor-friendly video</h2>
+        <div class="format"><strong>MP4</strong><span>H.264, WebM fallback</span></div>
+        <p class="hint">Recordings stream straight to disk, so long clips are safe. They're saved in Videos → OBS Lite.</p>
+      </div>
+      <div class="panel tips-panel">
+        <p class="eyebrow">HOTKEYS</p>
+        <p><kbd>F9</kbd> start / stop &nbsp; <kbd>F10</kbd> pause</p>
+        <p class="hint">Work even while you're inside your game.</p>
+      </div>
+    </aside>
+  </main>
+  <footer>OBS Lite · Lightweight desktop capture</footer>
+  <script src="renderer.js"></script>
+</body>
+</html>
