@@ -20,13 +20,14 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build Windows Executables
+      - name: Build Windows Unpacked App
+        env:
+          DEBUG: electron*
         run: npm run dist:win
 
       - name: Upload Release Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: OBS-Lite-Windows-Binaries
+          name: OBS-Lite-Windows-Unpacked
           path: |
-            release/*.exe
-            release/*.blockmap
+            release/win-unpacked/**/*
