@@ -2,26 +2,34 @@ name: Build OBS Lite Windows
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
-  build:
+  build-windows:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
+          cache: 'npm'
 
-      - run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-      - run: npm run dist:win
+      - name: Build Windows Executables
+        run: npm run dist:win
 
-      - uses: actions/upload-artifact@v4
+      - name: Upload Release Artifacts
+        uses: actions/upload-artifact@v4
         with:
-          name: OBS-Lite-Windows
-          path: release/*.exe
-          if-no-files-found: error
+          name: OBS-Lite-Windows-Binaries
+          path: |
+            release/*.exe
+            release/*.blockmap
