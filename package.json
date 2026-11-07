@@ -15,6 +15,9 @@
     "directories": {
       "output": "release"
     },
+    "files": [
+      "**/*"
+    ],
     "win": {
       "target": [
         "nsis",
