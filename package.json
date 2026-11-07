@@ -2,11 +2,11 @@
   "name": "obs-lite",
   "version": "1.0.0",
   "description": "Electron screen recorder",
-  "main": "main.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder",
-    "dist:win": "electron-builder --win --nsis --portable",
+    "dist:win": "electron-builder --win --nsis --portable -c.asar=false",
     "dist:mac": "electron-builder --mac"
   },
   "build": {
@@ -16,7 +16,8 @@
       "output": "release"
     },
     "files": [
-      "**/*"
+      "src/**/*",
+      "package.json"
     ],
     "win": {
       "target": [
@@ -30,7 +31,7 @@
     }
   },
   "devDependencies": {
-    "electron": "^28.0.0",
+    "electron": "28.2.0",
     "electron-builder": "^24.9.0"
   }
 }
