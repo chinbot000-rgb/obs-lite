@@ -52,10 +52,10 @@
           </label>
           <label>Video bitrate
             <select id="bitrate">
-              <option value="12000000">12 Mbps · Balanced</option>
-              <option value="20000000">20 Mbps · High</option>
-              <option value="35000000" selected>35 Mbps · Very high</option>
-              <option value="50000000">50 Mbps · Maximum</option>
+              <option value="20000000">20 Mbps · Balanced</option>
+              <option value="35000000">35 Mbps · High</option>
+              <option value="50000000" selected>50 Mbps · Very high</option>
+              <option value="70000000">70 Mbps · 4K / high detail</option>
             </select>
           </label>
           <label>Audio
@@ -75,7 +75,7 @@
           </label>
         </div>
         <label class="check"><input type="checkbox" id="hideOnStart" checked> Minimize OBS Lite when recording starts</label>
-        <p class="hint" id="audioHint">Actual quality depends on your display, GPU, and system load. A lower-resolution source is never upscaled to real 4K.</p>
+        <p class="hint" id="audioHint">Higher bitrate helps preserve detail, but needs more disk space and system performance. A lower-resolution source cannot become true 4K by upscaling.</p>
       </div>
     </section>
 

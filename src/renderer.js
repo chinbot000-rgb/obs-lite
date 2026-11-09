@@ -117,14 +117,25 @@ async function buildStream() {
   const needSys = !isMac && (mode === "system" || mode === "both");
   const needMic = mode === "mic" || mode === "both";
   const video = { mandatory: {
-    chromeMediaSource: "desktop", chromeMediaSourceId: selectedSource.id,
-    minFrameRate: fps, maxFrameRate: fps,
-    ...(d.width ? { maxWidth: d.width, maxHeight: d.height } : {})
+    chromeMediaSource: "desktop",
+    chromeMediaSourceId: selectedSource.id,
+    // Ask Chromium not to composite the system pointer into the captured frames.
+    // Electron/Chromium versions differ in support for this legacy desktop constraint.
+    cursor: "never",
+    minFrameRate: fps,
+    maxFrameRate: fps,
+    ...(d.width ? {
+      minWidth: d.width, maxWidth: d.width,
+      minHeight: d.height, maxHeight: d.height
+    } : {})
   } };
   const sysAudio = { mandatory: { chromeMediaSource: "desktop", chromeMediaSourceId: selectedSource.id } };
   stream = await navigator.mediaDevices.getUserMedia({ audio: needSys ? sysAudio : false, video });
   const vt = stream.getVideoTracks()[0];
-  if (vt && "contentHint" in vt) vt.contentHint = "motion"; // favour smooth motion for games
+  if (vt && "contentHint" in vt) {
+    // Game capture benefits from prioritising motion while retaining the requested bitrate.
+    try { vt.contentHint = "motion"; } catch {}
+  }
   if (needMic) {
     micStream = await navigator.mediaDevices.getUserMedia({
       audio: { echoCancellation: false, noiseSuppression: true, autoGainControl: false }, video: false
@@ -157,7 +168,11 @@ async function startRecording() {
     const rs = await buildStream();
     const mimeType = MIMES.find(t => MediaRecorder.isTypeSupported(t)) || "";
     const ext = mimeType.includes("mp4") ? "mp4" : "webm";
-    recorder = new MediaRecorder(rs, { mimeType, videoBitsPerSecond: Number($("bitrate").value), audioBitsPerSecond: 192000 });
+    recorder = new MediaRecorder(rs, {
+      ...(mimeType ? { mimeType } : {}),
+      videoBitsPerSecond: Number($("bitrate").value),
+      audioBitsPerSecond: 192000
+    });
     await api.openFile(ext);
     bytesWritten = 0; writeChain = Promise.resolve();
     recorder.ondataavailable = e => {
